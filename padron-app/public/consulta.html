@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Consulta · Padrón Electoral (simulación académica)</title>
+<link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+<header class="topbar">
+  <nav class="container d-flex flex-wrap align-items-center justify-content-between py-3">
+    <div><div class="brand fs-5">Sistema de Registro y Consulta de Padrón Electoral</div>
+    <div class="sub">Universidad Mariano Gálvez de Guatemala · Campus Jutiapa · Base de Datos I</div></div>
+    <ul class="nav">
+      <li class="nav-item"><a class="nav-link " href="/index.html">Inicio</a></li>
+      <li class="nav-item"><a class="nav-link " href="/registro.html">Registro</a></li>
+      <li class="nav-item"><a class="nav-link active" href="/consulta.html">Consulta</a></li>
+    </ul>
+  </nav>
+</header>
+<main class="container my-4" style="max-width:920px">
+  <h1 class="h3 section-title mt-0">Consulta de ciudadano empadronado</h1>
+  <div id="alerta" class="d-none"></div>
+
+  <div class="card mb-4" id="panelBusqueda"><div class="card-header sec">Datos de la consulta</div><div class="card-body">
+    <form id="form" novalidate class="row g-3">
+      <div class="col-md-5"><label class="form-label req" for="tipo">Tipo de documento</label>
+        <select class="form-select" id="tipo">
+          <option value="EMPADRONAMIENTO">Empadronamiento (No. de boleta)</option>
+          <option value="DPI">DPI (CUI de 13 dígitos)</option></select></div>
+      <div class="col-md-7"><label class="form-label req" for="numero">Número de documento</label>
+        <input class="form-control" id="numero" maxlength="13" autocomplete="off" required></div>
+      <div class="col-md-5"><label class="form-label req" for="fecha">Fecha de nacimiento</label>
+        <input class="form-control" id="fecha" placeholder="DD/MM/AAAA (ejemplo: 15/03/1985)" maxlength="10" inputmode="numeric" autocomplete="off" required></div>
+      <div class="col-md-7"><label class="form-label req">Código de verificación</label>
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+          <span class="captcha-box" id="captcha"></span>
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="btnCaptcha">↻ Cambiar código</button>
+          <input class="form-control" style="max-width:170px" id="captchaTexto" maxlength="5" placeholder="Escriba el código" autocomplete="off" required></div></div>
+      <div class="col-12"><button class="btn btn-primary btn-lg" type="submit" id="btnBuscar">Buscar</button></div>
+    </form></div></div>
+
+  <div id="resultado" class="d-none">
+    <h2 class="h4 section-title">Resultados de la búsqueda</h2>
+    <div class="mb-3">Estado del registro: <span class="badge fs-6" id="estado"></span></div>
+    <div class="card mb-3"><div class="card-header sec">Identificación</div><div class="card-body"><dl class="dato row mb-0" id="sec1"></dl></div></div>
+    <div class="card mb-3"><div class="card-header sec">Datos personales</div><div class="card-body"><dl class="dato row mb-0" id="sec2"></dl></div></div>
+    <div class="card mb-3"><div class="card-header sec">Vecindad del DPI</div><div class="card-body"><dl class="dato row mb-0" id="sec3"></dl></div></div>
+    <div class="card mb-3"><div class="card-header sec">Residencia y lugar de votación</div><div class="card-body"><dl class="dato row mb-0" id="sec4"></dl></div></div>
+    <button class="btn btn-primary mb-5" id="btnNueva">Nueva consulta</button>
+  </div>
+</main>
+<footer class="footer text-center container">
+  Sistema con fines estrictamente académicos. No guarda relación con instituciones oficiales. Todos los datos de prueba son ficticios.
+</footer>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script><script src="/js/common.js"></script><script src="/js/consulta.js"></script></body></html>

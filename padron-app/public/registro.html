@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registro · Padrón Electoral (simulación académica)</title>
+<link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+<header class="topbar">
+  <nav class="container d-flex flex-wrap align-items-center justify-content-between py-3">
+    <div><div class="brand fs-5">Sistema de Registro y Consulta de Padrón Electoral</div>
+    <div class="sub">Universidad Mariano Gálvez de Guatemala · Campus Jutiapa · Base de Datos I</div></div>
+    <ul class="nav">
+      <li class="nav-item"><a class="nav-link " href="/index.html">Inicio</a></li>
+      <li class="nav-item"><a class="nav-link active" href="/registro.html">Registro</a></li>
+      <li class="nav-item"><a class="nav-link " href="/consulta.html">Consulta</a></li>
+    </ul>
+  </nav>
+</header>
+<main class="container my-4">
+  <h1 class="h3 section-title mt-0">Registro de nuevo empadronamiento</h1>
+  <div id="alerta" class="d-none"></div>
+
+  <div id="exito" class="card d-none mb-4">
+    <div class="card-body text-center p-4">
+      <h2 class="h5 text-success">✔ Empadronamiento registrado correctamente</h2>
+      <p class="mb-1">Número de empadronamiento asignado:</p>
+      <div class="no-emp" id="noEmp"></div>
+      <p class="mt-3 mb-1"><strong id="exNombre"></strong></p>
+      <p class="text-muted small">Datos almacenados en MAYÚSCULAS por la base de datos.</p>
+      <button class="btn btn-primary" id="btnOtro">Registrar otro empadronamiento</button>
+    </div>
+  </div>
+
+  <form id="form" class="needs-validation" novalidate>
+    <div class="card mb-4"><div class="card-header sec">Identificación</div><div class="card-body row g-3">
+      <div class="col-md-4"><label class="form-label req" for="cui_dpi">CUI (DPI)</label>
+        <input class="form-control" id="cui_dpi" inputmode="numeric" maxlength="13" pattern="\d{13}" required>
+        <div class="invalid-feedback">Debe tener exactamente 13 dígitos.</div></div>
+      <div class="col-md-4"><label class="form-label req" for="fecha_emision_dpi">Fecha de emisión del DPI</label>
+        <input type="date" class="form-control" id="fecha_emision_dpi" required>
+        <div class="invalid-feedback" id="fbEmision">Indique una fecha válida, no posterior a hoy.</div></div>
+      <div class="col-md-4"><label class="form-label req" for="fecha_nacimiento">Fecha de nacimiento</label>
+        <input type="date" class="form-control" id="fecha_nacimiento" max="2009-01-01" required>
+        <div class="form-text">Debe tener 18 años cumplidos al 01/01/2027.</div>
+        <div class="invalid-feedback">Fecha no válida o persona menor de edad al 01/01/2027.</div></div>
+      <div class="col-md-4"><label class="form-label">No. de empadronamiento</label>
+        <input class="form-control" value="Se genera automáticamente" disabled></div>
+      <div class="col-md-4"><label class="form-label">Estado</label>
+        <input class="form-control" value="ACTIVO" disabled></div>
+    </div></div>
+
+    <div class="card mb-4"><div class="card-header sec">Datos personales</div><div class="card-body row g-3">
+      <div class="col-md-3"><label class="form-label req" for="primer_nombre">Primer nombre</label>
+        <input class="form-control" id="primer_nombre" maxlength="100" pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ' ]+" required>
+        <div class="invalid-feedback">Obligatorio, solo letras.</div></div>
+      <div class="col-md-3"><label class="form-label" for="segundo_nombre">Segundo nombre</label>
+        <input class="form-control" id="segundo_nombre" maxlength="100" pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ' ]*"></div>
+      <div class="col-md-3"><label class="form-label req" for="primer_apellido">Primer apellido</label>
+        <input class="form-control" id="primer_apellido" maxlength="100" pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ' ]+" required>
+        <div class="invalid-feedback">Obligatorio, solo letras.</div></div>
+      <div class="col-md-3"><label class="form-label" for="segundo_apellido">Segundo apellido</label>
+        <input class="form-control" id="segundo_apellido" maxlength="100" pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ' ]*"></div>
+      <div class="col-md-3"><label class="form-label req" for="genero_id">Género</label>
+        <select class="form-select" id="genero_id" required><option value="">Seleccione…</option></select>
+        <div class="invalid-feedback">Seleccione una opción.</div></div>
+      <div class="col-md-3"><label class="form-label req" for="sabe_leer_escribir">Lee y escribe</label>
+        <select class="form-select" id="sabe_leer_escribir" required><option value="">Seleccione…</option><option>SI</option><option>NO</option></select>
+        <div class="invalid-feedback">Seleccione una opción.</div></div>
+      <div class="col-md-3"><label class="form-label req" for="vidente">Vidente</label>
+        <select class="form-select" id="vidente" required><option value="">Seleccione…</option><option>SI</option><option>NO</option></select>
+        <div class="invalid-feedback">Seleccione una opción.</div></div>
+    </div></div>
+
+    <div class="card mb-4"><div class="card-header sec">Vecindad y residencia</div><div class="card-body row g-3">
+      <div class="col-md-3"><label class="form-label">Departamento de vecindad</label><input class="form-control" value="JUTIAPA" disabled></div>
+      <div class="col-md-3"><label class="form-label req" for="id_municipio_vecindad">Municipio de vecindad</label>
+        <select class="form-select" id="id_municipio_vecindad" required><option value="">Seleccione…</option></select>
+        <div class="invalid-feedback">Seleccione una opción.</div></div>
+      <div class="col-md-3"><label class="form-label">Departamento de residencia</label><input class="form-control" value="JUTIAPA" disabled></div>
+      <div class="col-md-3"><label class="form-label req" for="id_municipio_residencia">Municipio de residencia</label>
+        <select class="form-select" id="id_municipio_residencia" required><option value="">Seleccione…</option></select>
+        <div class="invalid-feedback">Seleccione una opción.</div></div>
+      <div class="col-md-3"><label class="form-label req" for="direccion_geoelectoral">Dirección geoelectoral</label>
+        <select class="form-select" id="direccion_geoelectoral" required><option value="">Seleccione…</option><option>SI</option><option>NO</option></select>
+        <div class="invalid-feedback">Seleccione una opción.</div></div>
+    </div></div>
+
+    <div class="card mb-4"><div class="card-header sec">Lugar de votación y afiliación</div><div class="card-body row g-3">
+      <div class="col-md-4"><label class="form-label req" for="mun_votacion">Municipio del lugar de votación</label>
+        <select class="form-select" id="mun_votacion" required><option value="">Seleccione…</option></select>
+        <div class="invalid-feedback">Seleccione una opción.</div></div>
+      <div class="col-md-4"><label class="form-label" for="filtro">Buscar lugar (código, nombre o dirección)</label>
+        <input class="form-control" id="filtro" placeholder="Escriba para filtrar…" autocomplete="off"></div>
+      <div class="col-md-4"><label class="form-label req" for="afiliacion_id">Afiliación</label>
+        <select class="form-select" id="afiliacion_id" required><option value="">Seleccione…</option></select>
+        <div class="invalid-feedback">Seleccione una opción.</div></div>
+      <div class="col-12"><label class="form-label req" for="lugar_votacion_id">Lugar de votación</label>
+        <select class="form-select" id="lugar_votacion_id" required size="1"><option value="">Seleccione primero un municipio…</option></select>
+        <div class="invalid-feedback">Seleccione el lugar de votación.</div></div>
+    </div></div>
+
+    <div class="d-flex gap-2 mb-5">
+      <button class="btn btn-primary btn-lg" type="submit" id="btnGuardar">Registrar empadronamiento</button>
+      <button class="btn btn-outline-secondary btn-lg" type="reset" id="btnLimpiar">Limpiar</button>
+    </div>
+  </form>
+</main>
+<footer class="footer text-center container">
+  Sistema con fines estrictamente académicos. No guarda relación con instituciones oficiales. Todos los datos de prueba son ficticios.
+</footer>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script><script src="/js/common.js"></script><script src="/js/registro.js"></script></body></html>
