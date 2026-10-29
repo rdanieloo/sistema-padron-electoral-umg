@@ -5,37 +5,38 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Registro · Padrón Electoral (simulación académica)</title>
 <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/vendor/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
 <link href="/css/styles.css" rel="stylesheet">
 </head>
 <body>
 <header class="topbar">
   <nav class="container d-flex flex-wrap align-items-center justify-content-between py-3">
-    <div><div class="brand fs-5">Sistema de Registro y Consulta de Padrón Electoral</div>
-    <div class="sub">Universidad Mariano Gálvez de Guatemala · Campus Jutiapa · Base de Datos I</div></div>
+    <div class="d-flex align-items-center gap-3"><i class="bi bi-bank2 fs-1"></i><div><div class="brand fs-5">Sistema de Registro y Consulta de Padrón Electoral</div>
+    <div class="sub">Universidad Mariano Gálvez de Guatemala · Campus Jutiapa · Base de Datos I</div></div></div>
     <ul class="nav">
-      <li class="nav-item"><a class="nav-link " href="/index.html">Inicio</a></li>
-      <li class="nav-item"><a class="nav-link active" href="/registro.html">Registro</a></li>
-      <li class="nav-item"><a class="nav-link " href="/consulta.html">Consulta</a></li>
+      <li class="nav-item"><a class="nav-link " href="/index.html"><i class="bi bi-house-door-fill me-1"></i>Inicio</a></li>
+      <li class="nav-item"><a class="nav-link active" href="/registro.html"><i class="bi bi-person-plus-fill me-1"></i>Registro</a></li>
+      <li class="nav-item"><a class="nav-link " href="/consulta.html"><i class="bi bi-search me-1"></i>Consulta</a></li>
     </ul>
   </nav>
 </header>
 <main class="container my-4">
-  <h1 class="h3 section-title mt-0">Registro de nuevo empadronamiento</h1>
+  <h1 class="h3 section-title mt-0"><i class="bi bi-person-plus-fill me-2"></i>Registro de nuevo empadronamiento</h1>
   <div id="alerta" class="d-none"></div>
 
   <div id="exito" class="card d-none mb-4">
     <div class="card-body text-center p-4">
-      <h2 class="h5 text-success">✔ Empadronamiento registrado correctamente</h2>
+      <h2 class="h5 text-success"><i class="bi bi-check-circle-fill me-1"></i> Empadronamiento registrado correctamente</h2>
       <p class="mb-1">Número de empadronamiento asignado:</p>
       <div class="no-emp" id="noEmp"></div>
       <p class="mt-3 mb-1"><strong id="exNombre"></strong></p>
       <p class="text-muted small">Datos almacenados en MAYÚSCULAS por la base de datos.</p>
-      <button class="btn btn-primary" id="btnOtro">Registrar otro empadronamiento</button>
+      <button class="btn btn-primary" id="btnOtro"><i class="bi bi-plus-circle me-2"></i>Registrar otro empadronamiento</button>
     </div>
   </div>
 
   <form id="form" class="needs-validation" novalidate>
-    <div class="card mb-4"><div class="card-header sec">Identificación</div><div class="card-body row g-3">
+    <div class="card mb-4"><div class="card-header sec"><i class="bi bi-person-vcard me-2"></i>Identificación</div><div class="card-body row g-3">
       <div class="col-md-4"><label class="form-label req" for="cui_dpi">CUI (DPI)</label>
         <input class="form-control" id="cui_dpi" inputmode="numeric" maxlength="13" pattern="\d{13}" required>
         <div class="invalid-feedback">Debe tener exactamente 13 dígitos.</div></div>
@@ -48,11 +49,12 @@
         <div class="invalid-feedback">Fecha no válida o persona menor de edad al 01/01/2027.</div></div>
       <div class="col-md-4"><label class="form-label">No. de empadronamiento</label>
         <input class="form-control" value="Se genera automáticamente" disabled></div>
-      <div class="col-md-4"><label class="form-label">Estado</label>
-        <input class="form-control" value="ACTIVO" disabled></div>
+      <div class="col-md-4"><label class="form-label req" for="estado_id">Estado</label>
+        <select class="form-select" id="estado_id" required><option value="">Seleccione…</option></select>
+        <div class="invalid-feedback">Seleccione una opción.</div></div>
     </div></div>
 
-    <div class="card mb-4"><div class="card-header sec">Datos personales</div><div class="card-body row g-3">
+    <div class="card mb-4"><div class="card-header sec"><i class="bi bi-person-lines-fill me-2"></i>Datos personales</div><div class="card-body row g-3">
       <div class="col-md-3"><label class="form-label req" for="primer_nombre">Primer nombre</label>
         <input class="form-control" id="primer_nombre" maxlength="100" pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ' ]+" required>
         <div class="invalid-feedback">Obligatorio, solo letras.</div></div>
@@ -74,7 +76,7 @@
         <div class="invalid-feedback">Seleccione una opción.</div></div>
     </div></div>
 
-    <div class="card mb-4"><div class="card-header sec">Vecindad y residencia</div><div class="card-body row g-3">
+    <div class="card mb-4"><div class="card-header sec"><i class="bi bi-house-fill me-2"></i>Vecindad y residencia</div><div class="card-body row g-3">
       <div class="col-md-3"><label class="form-label">Departamento de vecindad</label><input class="form-control" value="JUTIAPA" disabled></div>
       <div class="col-md-3"><label class="form-label req" for="id_municipio_vecindad">Municipio de vecindad</label>
         <select class="form-select" id="id_municipio_vecindad" required><option value="">Seleccione…</option></select>
@@ -88,7 +90,7 @@
         <div class="invalid-feedback">Seleccione una opción.</div></div>
     </div></div>
 
-    <div class="card mb-4"><div class="card-header sec">Lugar de votación y afiliación</div><div class="card-body row g-3">
+    <div class="card mb-4"><div class="card-header sec"><i class="bi bi-geo-alt-fill me-2"></i>Lugar de votación y afiliación</div><div class="card-body row g-3">
       <div class="col-md-4"><label class="form-label req" for="mun_votacion">Municipio del lugar de votación</label>
         <select class="form-select" id="mun_votacion" required><option value="">Seleccione…</option></select>
         <div class="invalid-feedback">Seleccione una opción.</div></div>
@@ -103,8 +105,8 @@
     </div></div>
 
     <div class="d-flex gap-2 mb-5">
-      <button class="btn btn-primary btn-lg" type="submit" id="btnGuardar">Registrar empadronamiento</button>
-      <button class="btn btn-outline-secondary btn-lg" type="reset" id="btnLimpiar">Limpiar</button>
+      <button class="btn btn-primary btn-lg" type="submit" id="btnGuardar"><i class="bi bi-person-check-fill me-2"></i>Registrar empadronamiento</button>
+      <button class="btn btn-outline-secondary btn-lg" type="reset" id="btnLimpiar"><i class="bi bi-eraser-fill me-2"></i>Limpiar</button>
     </div>
   </form>
 </main>

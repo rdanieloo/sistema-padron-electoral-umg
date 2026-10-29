@@ -5,12 +5,19 @@ let lugares = [];
 
 function hoy() { return new Date().toLocaleDateString('en-CA'); }
 
+function estadoActivo() {
+  const op = [...$('estado_id').options].find((o) => o.text === 'ACTIVO');
+  if (op) $('estado_id').value = op.value;
+}
+
 async function iniciar() {
   $('fecha_emision_dpi').max = hoy();
   try {
     const c = await api('/api/catalogos');
     llenarSelect($('genero_id'), c.generos, 'genero_id', 'descripcion_genero');
     llenarSelect($('afiliacion_id'), c.afiliaciones, 'afiliacion_id', 'descripcion_afiliacion');
+    llenarSelect($('estado_id'), c.estados, 'estado_id', 'descripcion_estado');
+    estadoActivo();
     ['id_municipio_vecindad', 'id_municipio_residencia', 'mun_votacion'].forEach((id) =>
       llenarSelect($(id), c.municipios, 'municipio_id', 'nombre_municipio'));
   } catch (e) { mostrarAlerta('danger', 'No se pudieron cargar los catálogos: ' + e.message); }
@@ -53,7 +60,8 @@ form.addEventListener('submit', async (ev) => {
     sabe_leer_escribir: v('sabe_leer_escribir'), vidente: v('vidente'),
     direccion_geoelectoral: v('direccion_geoelectoral'),
     id_municipio_vecindad: v('id_municipio_vecindad'), id_municipio_residencia: v('id_municipio_residencia'),
-    genero_id: v('genero_id'), afiliacion_id: v('afiliacion_id'), lugar_votacion_id: v('lugar_votacion_id')
+    genero_id: v('genero_id'), afiliacion_id: v('afiliacion_id'), lugar_votacion_id: v('lugar_votacion_id'),
+    estado_id: v('estado_id')
   };
   $('btnGuardar').disabled = true;
   try {
@@ -69,7 +77,7 @@ form.addEventListener('submit', async (ev) => {
 
 $('btnOtro').addEventListener('click', () => {
   form.reset(); form.classList.remove('was-validated', 'd-none');
-  $('exito').classList.add('d-none'); lugares = []; pintarLugares(); ocultarAlerta();
+  $('exito').classList.add('d-none'); lugares = []; pintarLugares(); estadoActivo(); ocultarAlerta();
 });
-$('btnLimpiar').addEventListener('click', () => { form.classList.remove('was-validated'); lugares = []; setTimeout(pintarLugares, 0); ocultarAlerta(); });
+$('btnLimpiar').addEventListener('click', () => { form.classList.remove('was-validated'); lugares = []; setTimeout(() => { pintarLugares(); estadoActivo(); }, 0); ocultarAlerta(); });
 iniciar();

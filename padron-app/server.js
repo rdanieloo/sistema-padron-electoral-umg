@@ -17,6 +17,7 @@ app.use(helmet({
       scriptSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", 'data:'],
+      fontSrc: ["'self'"],
       objectSrc: ["'none'"],
       frameAncestors: ["'none'"]
     }
@@ -25,6 +26,7 @@ app.use(helmet({
 app.use(express.json({ limit: '20kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/vendor/bootstrap', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
+app.use('/vendor/bootstrap-icons', express.static(path.join(__dirname, 'node_modules', 'bootstrap-icons')));
 
 /* ------------------------- Conexión a SQL Server ------------------------- */
 const dbConfig = {
@@ -104,12 +106,14 @@ app.get('/api/captcha', h(async (req, res) => { res.set('Cache-Control', 'no-sto
 
 app.get('/api/catalogos', h(async (req, res) => {
   const pool = await getPool();
-  const [m, g, a] = await Promise.all([
+  const [m, g, a, e] = await Promise.all([
     pool.request().execute('dbo.usp_ListarMunicipios'),
     pool.request().execute('dbo.usp_ListarGeneros'),
-    pool.request().execute('dbo.usp_ListarAfiliaciones')
+    pool.request().execute('dbo.usp_ListarAfiliaciones'),
+    pool.request().execute('dbo.usp_ListarEstados')
   ]);
-  res.json({ departamento: 'JUTIAPA', municipios: m.recordset, generos: g.recordset, afiliaciones: a.recordset });
+  res.json({ departamento: 'JUTIAPA', municipios: m.recordset, generos: g.recordset,
+             afiliaciones: a.recordset, estados: e.recordset });
 }));
 
 app.get('/api/lugares', h(async (req, res) => {
@@ -156,6 +160,7 @@ app.post('/api/registro', h(async (req, res) => {
     .input('genero_id', sql.Int, Number(b.genero_id))
     .input('afiliacion_id', sql.Int, Number(b.afiliacion_id))
     .input('lugar_votacion_id', sql.Int, Number(b.lugar_votacion_id))
+    .input('estado_id', sql.Int, entero(b.estado_id) ? Number(b.estado_id) : 1)
     .execute('dbo.usp_RegistrarCiudadano');
   res.status(201).json({ ok: true, mensaje: 'Empadronamiento registrado correctamente.', registro: r.recordset[0] });
 }));

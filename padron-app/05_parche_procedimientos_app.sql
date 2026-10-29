@@ -35,6 +35,13 @@ BEGIN
     SELECT afiliacion_id, descripcion_afiliacion FROM dbo.Afiliacion ORDER BY descripcion_afiliacion;
 END;
 GO
+CREATE OR ALTER PROCEDURE dbo.usp_ListarEstados
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT estado_id, descripcion_estado FROM dbo.Estado ORDER BY estado_id;
+END;
+GO
 CREATE OR ALTER PROCEDURE dbo.usp_ListarLugaresVotacion
     @municipio_id INT
 AS
@@ -63,7 +70,8 @@ CREATE OR ALTER PROCEDURE dbo.usp_RegistrarCiudadano
     @id_municipio_residencia INT,
     @genero_id INT,
     @afiliacion_id INT,
-    @lugar_votacion_id INT
+    @lugar_votacion_id INT,
+    @estado_id INT = 1
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -114,6 +122,9 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM dbo.LugarVotacion WHERE lugar_votacion_id = @lugar_votacion_id)
     BEGIN THROW 50111, 'El lugar de votación seleccionado no existe en el catálogo.', 1; END;
 
+    IF @estado_id IS NULL OR NOT EXISTS (SELECT 1 FROM dbo.Estado WHERE estado_id = @estado_id)
+    BEGIN THROW 50112, 'El estado seleccionado no es válido.', 1; END;
+
     /* Generacion del No. de empadronamiento (RN-1): aleatorio, alfanumerico, 10 caracteres, sin repetir */
     DECLARE @no VARCHAR(10), @i INT, @chars CHAR(36) = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     DECLARE @id INT;
@@ -136,7 +147,7 @@ BEGIN
             primer_nombre, segundo_nombre, primer_apellido, segundo_apellido,
             sabe_leer_escribir, vidente, direccion_geoelectoral,
             id_municipio_vecindad, id_municipio_residencia,
-            genero_id, afiliacion_id, lugar_votacion_id
+            genero_id, afiliacion_id, lugar_votacion_id, estado_id
         )
         VALUES
         (
@@ -144,7 +155,7 @@ BEGIN
             @primer_nombre, @segundo_nombre, @primer_apellido, @segundo_apellido,
             @sabe_leer_escribir, @vidente, @direccion_geoelectoral,
             @id_municipio_vecindad, @id_municipio_residencia,
-            @genero_id, @afiliacion_id, @lugar_votacion_id
+            @genero_id, @afiliacion_id, @lugar_votacion_id, @estado_id
         );
         SET @id = CONVERT(INT, SCOPE_IDENTITY());
     END TRY
